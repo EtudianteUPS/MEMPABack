@@ -4,5 +4,7 @@ This project was generated with [Express](https://github.com/expressjs/express) 
 
 ## Run the server
 
-Run `npm start` for running the back server. Navigate to `http://localhost:3000/`. To reload the server, kill the process by pressing Ctrl-c, then run ng serve
+Run `npm start` for running the back server. Navigate to `http://localhost:3000/`.
+
+To reload the server, kill the process by pressing `Ctrl-c`, then run `npm start`.
 
