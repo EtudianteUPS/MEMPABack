@@ -4,7 +4,13 @@
 var liste = [];
 var id = 0;
 
-//Constructeur avec structure qui prend en paramètre un objet musique
+
+/**
+ * Constructeur
+ * @param titre
+ * @param nomArtiste
+ * @constructor
+ */
 function Musique(titre, nomArtiste){
     this.id = id;
     this.titre = titre;
@@ -13,17 +19,26 @@ function Musique(titre, nomArtiste){
 
 //Methodes métier
 
-//Ajout
+/**
+ * Ajout d'un morceau dans la liste
+ * @param titre
+ * @param nomArtiste
+ * @returns {*}
+ */
 var ajouterMorceau = function (titre, nomArtiste){
     liste[id] = new Musique(titre, nomArtiste);
     //console.log("[metierMorcezu] before : liste["+id+"].id : " + liste[id].id);
-    console.log("liste[id] : "); console.log(liste[id]);
+    //console.log("liste[id] : "); console.log(liste[id]);
     id++;
     return liste[id-1];
 }
 
 
-// Récupère une musique à partir d'un id
+/**
+ * Récupère une musique
+ * @param id
+ * @returns {{}|*}
+ */
 var getMorceau = function (id){
     if (typeof liste[id].id == 'undefined') return {};
     else {
@@ -32,7 +47,10 @@ var getMorceau = function (id){
 }
 
 
-//Lister les morceaux
+/**
+ * Lister les morceaux
+ * @returns liste
+ */
 var listerMorceaux = function (){
     return Object.values(liste);
 }

@@ -8,13 +8,14 @@ app.use(bodyparser.json());
 
 //Modification des entêtes HTTP pour désactiver le mécanisme de sécurité du serveur pour le projet Angular
 app.all('*', function (req, res, next){
-    res.header("Acces-Control-Allow-Origin", "*"); res.header("Acces-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"); res.header("Acces-Control-Allow-Methods",
+    res.header("Access-Control-Allow-Origin", "*"); res.header("Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"); res.header("Access-Control-Allow-Methods",
         "GET, POST, PUT, DELETE, OPTIONS"); next();
 });
 
 
 /*  Debut métier Playlist */
+metier.initialisation();
 
 //Ajouter une playlist
 app.post('/api/playlists', function (req, res){
@@ -97,7 +98,7 @@ app.put('/api/playlists/:id', function (req, res){
 /*  Debut métier Utilisateur */
 
 //Ajouter un utilisateur
-app.post('/api/utilisateur', function (req, res){
+app.post('/api/utilisateurs', function (req, res){
     // 1. Récupérer les paramètres
     var user = req.body;
 
@@ -113,13 +114,13 @@ app.post('/api/utilisateur', function (req, res){
 
 
 // lister les utilisateurs
-app.get('/api/utilisateur', function (req, res){
+app.get('/api/utilisateurs', function (req, res){
     res.status(200).json(metierUtilisateur.listerUtilisateur());
 });
 
 
 //Rechercher un utilisateur
-app.get('/api/utilisateur/:id', function (req, res){
+app.get('/api/utilisateurs/:id', function (req, res){
     // 1.
     var id = req.params.id;
 
