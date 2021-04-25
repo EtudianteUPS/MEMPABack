@@ -46,7 +46,7 @@ app.get('/api/playlists/:id', function (req, res){
 
     // 2.
     var obj = metier.getPlaylist(id);
-
+    console.log("obj : "); console.log(obj);
     // 3.
     if(typeof obj.id === 'undefined')
         res.status(404); // connait pas
@@ -80,13 +80,16 @@ app.get('/api/playlists/:id', function (req, res){
 //Ajouter un titre à une playlist
 app.put('/api/playlists/:id', function (req, res){
     // 1. Récupérer les paramètres
+    var id = req.params.id;
+
     var musique = req.body;
 
     // 2. faire appel au métier
-    var objRes = metier.ajouterTitre(req.params.id, musique.titre, musique.nomArtiste);
+    var objRes = metier.ajouterTitre(id, musique);
+    console.log("objRes : "); console.log(objRes);
 
     // 3. forger le résultat
-    if((typeof objRes === 'undefined') || (typeof objRes === {}))
+    if((typeof objRes.listeMorceaux[objRes.listeMorceaux.length - 1] === 'undefined') || (typeof objRes === {}))
         res.status(400).json({}); //erreur coté client
     else
         res.status(201).json(objRes); //objet correct
@@ -95,15 +98,21 @@ app.put('/api/playlists/:id', function (req, res){
 /*  Fin métier Playlist */
 
 
+
 /*  Debut métier Utilisateur */
+
+metierUtilisateur.initialisation();
 
 //Ajouter un utilisateur
 app.post('/api/utilisateurs', function (req, res){
     // 1. Récupérer les paramètres
-    var user = req.body;
+    var utilisateur = req.body;
+
+    console.log("user : "); console.log(utilisateur);
 
     // 2. faire appel au métier
-    var objRes = metierUtilisateur.ajouterUtilisateur(user.nomUtilisateur);
+    var objRes = metierUtilisateur.ajouterUtilisateur(utilisateur);
+    console.log("objRes : "); console.log(objRes);
 
     // 3. forger le résultat
     if((typeof objRes === 'undefined') || (typeof objRes === {}))
@@ -111,6 +120,7 @@ app.post('/api/utilisateurs', function (req, res){
     else
         res.status(201).json(objRes); //objet correct
 });
+
 
 
 // lister les utilisateurs
