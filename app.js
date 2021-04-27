@@ -19,7 +19,7 @@ metier.initialisation();
 
 //Ajouter une playlist
 app.post('/api/playlists', function (req, res){
-    // 1. Récupérer les paramètres
+    // 1. Récupérer le body
     var playlist = req.body;
 
     // 2. faire appel au métier
@@ -55,26 +55,22 @@ app.get('/api/playlists/:id', function (req, res){
 });
 
 
-// //Suprimer une playlist
-// app.delete('/api/playlists/:id', function (req, res){
-//     //0. Récupération de l'ancienne taille de la liste
-//     var oldLength = metier.lister().length;
-//
-//     // 1.
-//     var id = req.params.id;
-//
-//     // 2.
-//     var obj = metier.deletePlaylist(id);
-//     console.log("obj : "); console.log(obj);
-//
-//     // 3.
-//     console.log(obj.some(o => o.id === 'undefined'));
-//
-//     if(obj.length === oldLength)
-//         res.status(404); // connait pas
-//     else
-//         res.status(200).json(obj);
-// })
+//Suprimer une playlist
+app.delete('/api/playlists/deleteRow/:id', function (req, res){
+
+    // 1.
+    var id = req.params.id;
+
+    // 2.
+    var obj = metier.supprimerPlaylist(parseInt(id));
+
+
+    // 3.
+
+    if ((typeof obj === 'undefined') || (obj === {}))
+        res.status(200).json(metier.lister());
+    else res.status(404).json({});
+});
 
 
 //Ajouter un titre à une playlist

@@ -1,6 +1,7 @@
 // Partie Métier de la playlist musical (Back)
 
 //Déclarations
+const list = [];
 const musique = require("./metierMorceau");
 const fs = require('fs');
 const path = 'data/listePlaylist.json';
@@ -41,6 +42,7 @@ var readFromJson = function (path) {
             if (objJson.liste.length != 0)
                 objJson = JSON.parse(donnees);
             //console.log("[readFromJson] objJson.length : "); console.log(objJson.liste.length);
+            console.log(objJson.liste.length);
         }
     });
 }
@@ -70,6 +72,7 @@ function Playlist(playlist){
     this.listeContributeurs= playlist.listeContributeurs;
     this.style= playlist.style;
 }
+
 
 
 
@@ -160,28 +163,21 @@ var lister = function (){
     return Object.values(objJson.liste);
 }
 
-// const SUPPRESSION_OK = 1;
-// const SUPPRESSION_ERREUR = 0;
-//
-// //Supprimer une playlist à partir d'un id
-// var deletePlaylist = function (id){
-//     var i;
-//     for (i=0; i<objJson.liste.length; i++){
-//         // console.log("liste[i].id : " + liste[i].id);
-//         // console.log("id : " + id);
-//         if (objJson.liste[i].id == id ) {
-//             objJson.liste.splice(i, 1); // at position "i" remove 1 item
-//
-//             var donnees = JSON.stringify(objJson); // normalisation des données
-//             fs.writeFile(path, donnees, (err) => {
-//                 if (err) throw err;
-//             }); // écriture dans le fichier utilisateur.json
-//
-//             break;
-//         }
-//     }
-//     return liste;
-// }
+
+var supprimerPlaylist = function (id) {
+
+    readFromJson(path);
+    for (var i = 0; i < objJson.liste.length; i++) {
+        if (id === objJson.liste[i].id) {
+            objJson.liste.splice(i, 1);
+        }
+        writeInJson(path);
+        console.log(objJson.liste);
+
+    }
+
+
+}
 
 
 // On exporte les méthodes pour pouvoir les utiliser dans le module App.js
@@ -191,3 +187,5 @@ exports.lister = lister;
 //exports.deletePlaylist = deletePlaylist;
 exports.ajouterTitre = ajouterTitre;
 exports.initialisation = initialisation;
+exports.supprimerPlaylist = supprimerPlaylist;
+
