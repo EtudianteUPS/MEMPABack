@@ -59,8 +59,7 @@ var writeInJson = function (path) {
 
 /**
  * Constructeur
- * @param nomUtilisateur
- * @param motDePasse
+ * @param utilisateur
  * @constructor
  */
 function Utilisateur(utilisateur){
@@ -73,13 +72,17 @@ function Utilisateur(utilisateur){
 //Methodes métier
 /**
  * Ajout un utilisateur à la liste d'utilisateurs
- * @param nomUtilisateur
+ * @param utilisateur
  * @returns {Utilisateur}
  */
 var ajouterUtilisateur = function (utilisateur){
     //metierJson.getObjJson().liste[id] = new Utilisateur(nomUtilisateur);
-    console.log("user : ");
-    console.log(utilisateur);
+    var o = getUtilisateur(utilisateur.nomUtilisateur);
+
+    if(typeof o.nomUtilisateur != 'undefined'){
+        console.log("ERR - Ce pseudo existe déjà !"); console.log(o);
+        return {};
+    }
     utilisateur.id = idUtilisateur;
     objJson.liste[pos] = new Utilisateur(utilisateur);
 
@@ -92,20 +95,38 @@ var ajouterUtilisateur = function (utilisateur){
 }
 
 
+// var getUtilisateur = function (id){
+//     d =  fs.readFileSync(path,'utf8'); // on n'écrit pas dans le fichier tant qu'on a pas fini de le lire
+//     objJson = JSON.parse(d);
+//
+//     if (typeof objJson.liste[id] == 'undefined')
+//         return {};
+//     return objJson.liste[id];
+// }
 /**
- * Récupère un utilisateur
- * @param id
- * @returns {{}|liste[id]}
+ * Récupère l'utilisateur
+ * @param nomUtilisateur
+ * @return {{}|*}
  */
-var getUtilisateur = function (id){
-    d =  fs.readFileSync(path,'utf8'); // on n'écrit pas dans le fichier tant qu'on a pas fini de le lire
-    objJson = JSON.parse(d);
+var getUtilisateur = function (nomUtilisateur){
+    readFromJson(path);
 
-    if (typeof objJson.liste[id] == 'undefined')
-        return {};
-    return objJson.liste[id];
+    for(var i=0; i<objJson.liste.length; i++){
+        if(objJson.liste[i].nomUtilisateur == nomUtilisateur){
+            return objJson.liste[i];
+        }
+    }
+    return {};
 }
 
+var connexion = function (nomUtilisateur, motDePasse){
+    var u = this.getUtilisateur(nomUtilisateur);
+
+    if(u.motDePasse == motDePasse) {
+        return u;
+    }
+    return {};
+}
 
 /**
  * Liste les utilisteurs
@@ -137,3 +158,4 @@ exports.ajouterUtilisateur = ajouterUtilisateur;
 exports.getUtilisateur = getUtilisateur;
 exports.listerUtilisateur = listerUtilisateur;
 exports.initialisation = initialisation;
+exports.connexion = connexion;

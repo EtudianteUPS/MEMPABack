@@ -79,6 +79,7 @@ function Playlist(playlist){
 /**
  * Ajout d'un titre dans une playlist
  * @param idPlaylist <number>
+ * @param musique
  * @returns {Playlist}
  */
 var ajouterTitre = function (idPlaylist, musique){
@@ -105,14 +106,15 @@ var ajouterTitre = function (idPlaylist, musique){
 
 /**
  * Ajout d'une playlist dans la liste
+ * @param nomUtilisateur
  * @param playlist
  * @returns {Playlist}
  */
-var ajouter = function (playlist){
+var ajouter = function (nomUtilisateur, playlist){
     playlist.nbClics = 0;
     playlist.listeMorceaux = [];
     playlist.listeContributeurs = [];
-
+    playlist.nomCreateur = nomUtilisateur;
     playlist.id = idPlaylist;
     objJson.liste[pos] = new Playlist(playlist);
     writeInJson(path);

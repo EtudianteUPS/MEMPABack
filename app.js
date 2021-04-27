@@ -18,12 +18,14 @@ app.all('*', function (req, res, next){
 metier.initialisation();
 
 //Ajouter une playlist
-app.post('/api/playlists', function (req, res){
+app.post('/api/playlists/:nomUtilisateur', function (req, res){
     // 1. Récupérer les paramètres
     var playlist = req.body;
+    var nomUtilisateur= req.params.nomUtilisateur;
+    console.log("nomUtilisateur : " + nomUtilisateur);
 
     // 2. faire appel au métier
-    var objRes = metier.ajouter(playlist);
+    var objRes = metier.ajouter(nomUtilisateur, playlist);
 
     // 3. forger le résultat
     if((typeof objRes === 'undefined') || (typeof objRes === {}))
@@ -46,7 +48,7 @@ app.get('/api/playlists/:id', function (req, res){
 
     // 2.
     var obj = metier.getPlaylist(id);
-    console.log("obj : "); console.log(obj);
+
     // 3.
     if(typeof obj.id === 'undefined')
         res.status(404); // connait pas
@@ -86,7 +88,6 @@ app.put('/api/playlists/:id', function (req, res){
 
     // 2. faire appel au métier
     var objRes = metier.ajouterTitre(id, musique);
-    console.log("objRes : "); console.log(objRes);
 
     // 3. forger le résultat
     if((typeof objRes.listeMorceaux[objRes.listeMorceaux.length - 1] === 'undefined') || (typeof objRes === {}))
@@ -103,19 +104,16 @@ app.put('/api/playlists/:id', function (req, res){
 
 metierUtilisateur.initialisation();
 
-//Ajouter un utilisateur
+//Inscrire un utilisateur
 app.post('/api/utilisateurs', function (req, res){
     // 1. Récupérer les paramètres
     var utilisateur = req.body;
 
-    console.log("user : "); console.log(utilisateur);
-
     // 2. faire appel au métier
     var objRes = metierUtilisateur.ajouterUtilisateur(utilisateur);
-    console.log("objRes : "); console.log(objRes);
 
     // 3. forger le résultat
-    if((typeof objRes === 'undefined') || (typeof objRes === {}))
+    if((typeof objRes.nomUtilisateur === 'undefined' || typeof objRes.motDePasse === 'undefined'))
         res.status(400).json({}); //erreur coté client
     else
         res.status(201).json(objRes); //objet correct
@@ -129,19 +127,37 @@ app.get('/api/utilisateurs', function (req, res){
 });
 
 
-//Rechercher un utilisateur
-app.get('/api/utilisateurs/:id', function (req, res){
+//Rechercher un utilisateur par id
+// app.get('/api/utilisateurs/:id', function (req, res){
+//     // 1.
+//     var id = req.params.id;
+//
+//     // 2.
+//     var obj = metierUtilisateur.getUtilisateur(id);
+//
+//     // 3.
+//     if(typeof obj.id === 'undefined')
+//         res.status(404); // connait pas
+//     else
+//         res.status(200).json(obj); //objet correct
+// });
+
+//Connecter un utilisateur
+app.get('/api/utilisateurs/:nomUtilisateur/:motDePasse', function (req, res){
     // 1.
-    var id = req.params.id;
+    var nomUtilisateur = req.params.nomUtilisateur;
+    var motDePasse = req.params.motDePasse;
 
     // 2.
-    var obj = metierUtilisateur.getUtilisateur(id);
+    var obj = metierUtilisateur.connexion(nomUtilisateur, motDePasse);
 
     // 3.
-    if(typeof obj.id === 'undefined')
-        res.status(404); // connait pas
-    else
+    if(typeof obj.nomUtilisateur == 'undefined' && typeof obj.motDePasse == 'undefined') {
+        res.status(404).json(obj); // connait pas
+    }
+    else {
         res.status(200).json(obj); //objet correct
+    }
 });
 
 /*  Fin métier Utilisateur */
