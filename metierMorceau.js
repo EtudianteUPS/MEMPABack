@@ -11,10 +11,10 @@ var id = 0;
  * @param nomArtiste
  * @constructor
  */
-function Musique(titre, nomArtiste){
-    this.id = id;
-    this.titre = titre;
-    this.nomArtiste = nomArtiste;
+function Musique(musique){
+    this.id = musique.id;
+    this.titre = musique.titre;
+    this.nomArtiste = musique.nomArtiste;
 }
 
 //Methodes métier
@@ -25,12 +25,14 @@ function Musique(titre, nomArtiste){
  * @param nomArtiste
  * @returns {*}
  */
-var ajouterMorceau = function (titre, nomArtiste){
-    liste[id] = new Musique(titre, nomArtiste);
+var ajouterMorceau = function (musique){
+    if (musique.titre == undefined && musique.nomArtiste == undefined) return ;
+    musique.id = id;
+    liste[id] = new Musique(musique);
     //console.log("[metierMorcezu] before : liste["+id+"].id : " + liste[id].id);
     //console.log("liste[id] : "); console.log(liste[id]);
     id++;
-    return liste[id-1];
+    return liste[id - 1];
 }
 
 

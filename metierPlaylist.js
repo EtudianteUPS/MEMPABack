@@ -1,8 +1,7 @@
-// Partie Métier de la playlist musical (Back)
+/** Partie Métier de la playlist musical (Back) */
 
 //Déclarations
-const list = [];
-const musique = require("./metierMorceau");
+const metierMusique = require("./metierMorceau");
 const fs = require('fs');
 const path = 'data/listePlaylist.json';
 var objJson = { //Liste de playlist
@@ -42,7 +41,6 @@ var readFromJson = function (path) {
             if (objJson.liste.length != 0)
                 objJson = JSON.parse(donnees);
             //console.log("[readFromJson] objJson.length : "); console.log(objJson.liste.length);
-            console.log(objJson.liste.length);
         }
     });
 }
@@ -75,25 +73,20 @@ function Playlist(playlist){
 
 
 
-
 //Methodes métier
 
 /**
  * Ajout d'un titre dans une playlist
  * @param idPlaylist <number>
- * @param titre <string>
- * @param nomArtiste <string>
+ * @param musique
  * @returns {Playlist}
  */
-var ajouterTitre = function (idPlaylist, titre, nomArtiste){
-    var objM = musique.ajouterMorceau(titre, nomArtiste);
-
-    //console.log("[metierPlay] objM : "); console.log(objM);
+var ajouterTitre = function (idPlaylist, musique){
+    var objM = metierMusique.ajouterMorceau(musique);
 
     // let p = getPlaylist(idPlaylist);
     // p.nbClics--;
     // p.listeMorceaux.push(objM);
-
 
     //objJson.liste[idPlaylist].nbClics--; // normalement je dois lire le fichier (avec getPlaylist) au cas il a ete modifié sauf que get playlist incrément d'où le --
     objJson.liste[idPlaylist].listeMorceaux.push(objM);
@@ -112,14 +105,15 @@ var ajouterTitre = function (idPlaylist, titre, nomArtiste){
 
 /**
  * Ajout d'une playlist dans la liste
+ * @param nomUtilisateur
  * @param playlist
  * @returns {Playlist}
  */
-var ajouter = function (playlist){
+var ajouter = function (nomUtilisateur, playlist){
     playlist.nbClics = 0;
     playlist.listeMorceaux = [];
     playlist.listeContributeurs = [];
-
+    playlist.nomCreateur = nomUtilisateur;
     playlist.id = idPlaylist;
     objJson.liste[pos] = new Playlist(playlist);
     writeInJson(path);
@@ -142,7 +136,6 @@ var getPlaylist = function (id){
     d =  fs.readFileSync(path,'utf8'); // on n'écrit pas dans le fichier tant qu'on a pas fini de le lire
     objJson = JSON.parse(d);
     //readFromJson(path);
-
     for (i = 0; i<objJson.liste.length; i++){
         if (objJson.liste[i].id == id){
             objJson.liste[i].nbClics++;
