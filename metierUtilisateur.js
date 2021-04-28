@@ -69,7 +69,6 @@ function Utilisateur(id, nomUtilisateur){
     this.id = id;
     this.id = id;
     this.nomUtilisateur = nomUtilisateur;
-    console.log("[constructeur user] id :" + this.id + " nom : " + this.nomUtilisateur);
     // this.motDePasse = utilisateur.motDePasse;
 }
 

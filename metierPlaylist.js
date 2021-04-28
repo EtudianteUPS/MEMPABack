@@ -84,11 +84,11 @@ function Playlist(playlist){
  */
 var ajouterTitre = function (idPlaylist, musique){
     var objM = metierMusique.ajouterMorceau(musique);
-    console.log("[metier play] ajouterTitre objM :"); console.log(objM);
 
     for(var i=0; i<objJson.liste.length; i++){
         if(objJson.liste[i].id == idPlaylist){
             objJson.liste[i].listeMorceaux.push(objM);
+            objJson.liste[i].nbClics--;
             writeInJson(path);
 
             return objJson.liste[i];
@@ -107,10 +107,9 @@ var ajouterTitre = function (idPlaylist, musique){
 var ajouter = function (nomUtilisateur, playlist){
     /* Cherche si nomUtilisateur existe et si non, l'ajoute à la liste d'utilisateur */
     var tmp = metierUtilisateur.getUtilisateur(nomUtilisateur);
-    console.log("[metierPlaylist] nomUtilisateur : "); console.log(tmp);
+
     if (typeof tmp.nomUtilisateur == "undefined"){
         tmp = metierUtilisateur.ajouterUtilisateur(nomUtilisateur);
-        console.log("[metierPlaylist | ajouterUser] nomUtilisateur : "); console.log(tmp);
     }
 
     playlist.nbClics = 0;
@@ -120,7 +119,7 @@ var ajouter = function (nomUtilisateur, playlist){
     playlist.id = idPlaylist;
     objJson.liste[pos] = new Playlist(playlist);
     writeInJson(path);
-    console.log("[metier playlist] ajouter obj"); console.log(objJson.liste[pos]);
+
     pos++;
     idPlaylist++;
     //return liste[pos -1];
@@ -165,9 +164,11 @@ var supprimerPlaylist = function (id) {
     for (var i = 0; i < objJson.liste.length; i++) {
         if (id === objJson.liste[i].id) {
             objJson.liste.splice(i, 1);
+            writeInJson(path);
         }
-        writeInJson(path);
-        console.log(objJson.liste);
+    }
+    if (objJson.liste.length == 0){
+        this.initialisation();
     }
 }
 

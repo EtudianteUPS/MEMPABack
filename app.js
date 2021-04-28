@@ -22,11 +22,9 @@ app.post('/api/playlists/:nomUtilisateur', function (req, res){
     // 1. Récupérer les paramètres
     var playlist = req.body;
     var nomUtilisateur= req.params.nomUtilisateur;
-    console.log("[app.js] nomUtilisateur : " + nomUtilisateur);
 
     // 2. faire appel au métier
     var objRes = metier.ajouter(nomUtilisateur, playlist);
-    console.log("[app] objRes :"); console.log(objRes);
 
     // 3. forger le résultat
     if((typeof objRes === 'undefined') || (typeof objRes === {}))
@@ -78,11 +76,10 @@ app.put('/api/playlists/:id', function (req, res){
     // 1. Récupérer les paramètres
     var id = req.params.id;
     var musique = req.body;
-    console.log("[app] id : " + id + ", musique : "); console.log(musique);
 
     // 2. faire appel au métier
     var objRes = metier.ajouterTitre(id, musique);
-    console.log("[app] objRes : "); console.log(objRes);
+
     // 3. forger le résultat
     if((typeof objRes.listeMorceaux[objRes.listeMorceaux.length - 1] === 'undefined') || (typeof objRes === {}))
         res.status(400).json({}); //erreur coté client
