@@ -25,6 +25,7 @@ var initialisation = function (){
         idUtilisateur = objJson.liste[pos - 1].id + 1;
     else
         idUtilisateur = 0;
+    //console.log("[metierUser] init"); console.log("idUser : " + idUtilisateur); console.log("pos : " + pos);
 }
 
 
@@ -57,34 +58,49 @@ var writeInJson = function (path) {
 }
 
 
+
+/**
+ * Constructeur
+ * @param id
+ * @param nomUtilisateur
+ * @constructor
+ */
+function Utilisateur(id, nomUtilisateur){
+    this.id = id;
+    this.id = id;
+    this.nomUtilisateur = nomUtilisateur;
+    console.log("[constructeur user] id :" + this.id + " nom : " + this.nomUtilisateur);
+    // this.motDePasse = utilisateur.motDePasse;
+}
+
+
 /**
  * Constructeur
  * @param utilisateur
  * @constructor
  */
-function Utilisateur(utilisateur){
-    this.id = utilisateur.id;
-    this.nomUtilisateur = utilisateur.nomUtilisateur;
-    this.motDePasse = utilisateur.motDePasse;
-}
+// function Utilisateur(utilisateur){
+//     this.id = utilisateur.id;
+//     this.nomUtilisateur = utilisateur.nomUtilisateur;
+//     // this.motDePasse = utilisateur.motDePasse;
+// }
 
 
 //Methodes métier
 /**
  * Ajout un utilisateur à la liste d'utilisateurs
- * @param utilisateur
+ * @param nomUtilisateur
  * @returns {Utilisateur}
  */
-var ajouterUtilisateur = function (utilisateur){
-    //metierJson.getObjJson().liste[id] = new Utilisateur(nomUtilisateur);
-    var o = getUtilisateur(utilisateur.nomUtilisateur);
+var ajouterUtilisateur = function (nomUtilisateur){
+    var o = getUtilisateur(nomUtilisateur);
 
     if(typeof o.nomUtilisateur != 'undefined'){
         console.log("ERR - Ce pseudo existe déjà !"); console.log(o);
         return {};
     }
-    utilisateur.id = idUtilisateur;
-    objJson.liste[pos] = new Utilisateur(utilisateur);
+    // utilisateur.id = idUtilisateur;
+    objJson.liste[pos] = new Utilisateur(idUtilisateur,nomUtilisateur);
 
     writeInJson(path);
 
@@ -103,6 +119,7 @@ var ajouterUtilisateur = function (utilisateur){
 //         return {};
 //     return objJson.liste[id];
 // }
+
 /**
  * Récupère l'utilisateur
  * @param nomUtilisateur
@@ -119,14 +136,14 @@ var getUtilisateur = function (nomUtilisateur){
     return {};
 }
 
-var connexion = function (nomUtilisateur, motDePasse){
-    var u = this.getUtilisateur(nomUtilisateur);
-
-    if(u.motDePasse == motDePasse) {
-        return u;
-    }
-    return {};
-}
+// var connexion = function (nomUtilisateur, motDePasse){
+//     var u = this.getUtilisateur(nomUtilisateur);
+//
+//     if(u.motDePasse == motDePasse) {
+//         return u;
+//     }
+//     return {};
+// }
 
 /**
  * Liste les utilisteurs
@@ -138,16 +155,6 @@ var listerUtilisateur = function (){
     // console.log("[metierUseur] objJson : "); console.log(objJson);
     // return objJson;
 
-    // fs.readFile(path, 'utf8', function readFileCallback(err, data){
-    //     if (err){
-    //         console.log(err);
-    //     } else {
-    //         objJson = JSON.parse(data);
-    //     }
-    // });
-    //
-    // return Object.values(objJson.liste);
-
     readFromJson(path);
     return Object.values(objJson.liste);
 }
@@ -158,4 +165,4 @@ exports.ajouterUtilisateur = ajouterUtilisateur;
 exports.getUtilisateur = getUtilisateur;
 exports.listerUtilisateur = listerUtilisateur;
 exports.initialisation = initialisation;
-exports.connexion = connexion;
+// exports.connexion = connexion;

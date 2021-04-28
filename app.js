@@ -22,10 +22,11 @@ app.post('/api/playlists/:nomUtilisateur', function (req, res){
     // 1. Récupérer les paramètres
     var playlist = req.body;
     var nomUtilisateur= req.params.nomUtilisateur;
-    console.log("nomUtilisateur : " + nomUtilisateur);
+    console.log("[app.js] nomUtilisateur : " + nomUtilisateur);
 
     // 2. faire appel au métier
     var objRes = metier.ajouter(nomUtilisateur, playlist);
+    console.log("[app] objRes :"); console.log(objRes);
 
     // 3. forger le résultat
     if((typeof objRes === 'undefined') || (typeof objRes === {}))
@@ -59,32 +60,29 @@ app.get('/api/playlists/:id', function (req, res){
 
 //Suprimer une playlist
 app.delete('/api/playlists/deleteRow/:id', function (req, res){
-
     // 1.
     var id = req.params.id;
 
     // 2.
     var obj = metier.supprimerPlaylist(parseInt(id));
 
-
     // 3.
-
     if ((typeof obj === 'undefined') || (obj === {}))
         res.status(200).json(metier.lister());
     else res.status(404).json({});
 });
 
 
-//Ajouter un titre à une playlist
+//Ajouter un titre à une playlist existante
 app.put('/api/playlists/:id', function (req, res){
     // 1. Récupérer les paramètres
     var id = req.params.id;
-
     var musique = req.body;
+    console.log("[app] id : " + id + ", musique : "); console.log(musique);
 
     // 2. faire appel au métier
     var objRes = metier.ajouterTitre(id, musique);
-
+    console.log("[app] objRes : "); console.log(objRes);
     // 3. forger le résultat
     if((typeof objRes.listeMorceaux[objRes.listeMorceaux.length - 1] === 'undefined') || (typeof objRes === {}))
         res.status(400).json({}); //erreur coté client
@@ -155,7 +153,6 @@ app.get('/api/utilisateurs/:nomUtilisateur/:motDePasse', function (req, res){
 });
 
 /*  Fin métier Utilisateur */
-
 
 app.listen(3000, function (){
     console.log('server running...')

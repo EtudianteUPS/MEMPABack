@@ -2,6 +2,7 @@
 
 //Déclarations
 const metierMusique = require("./metierMorceau");
+const metierUtilisateur = require("./metierUtilisateur");
 const fs = require('fs');
 const path = 'data/listePlaylist.json';
 var objJson = { //Liste de playlist
@@ -83,23 +84,17 @@ function Playlist(playlist){
  */
 var ajouterTitre = function (idPlaylist, musique){
     var objM = metierMusique.ajouterMorceau(musique);
+    console.log("[metier play] ajouterTitre objM :"); console.log(objM);
 
-    // let p = getPlaylist(idPlaylist);
-    // p.nbClics--;
-    // p.listeMorceaux.push(objM);
+    for(var i=0; i<objJson.liste.length; i++){
+        if(objJson.liste[i].id == idPlaylist){
+            objJson.liste[i].listeMorceaux.push(objM);
+            writeInJson(path);
 
-    //objJson.liste[idPlaylist].nbClics--; // normalement je dois lire le fichier (avec getPlaylist) au cas il a ete modifié sauf que get playlist incrément d'où le --
-    objJson.liste[idPlaylist].listeMorceaux.push(objM);
-
-    // var donnees = JSON.stringify(objJson); // normalisation des données
-    // fs.writeFile(path, donnees, (err) => {
-    //     if (err) throw err;
-    // }); // écriture dans le fichier utilisateur.json
-
-    writeInJson(path);
-
-    //return p;
-    return objJson.liste[idPlaylist];
+            return objJson.liste[i];
+        }
+    }
+    return {};
 }
 
 
@@ -110,14 +105,22 @@ var ajouterTitre = function (idPlaylist, musique){
  * @returns {Playlist}
  */
 var ajouter = function (nomUtilisateur, playlist){
+    /* Cherche si nomUtilisateur existe et si non, l'ajoute à la liste d'utilisateur */
+    var tmp = metierUtilisateur.getUtilisateur(nomUtilisateur);
+    console.log("[metierPlaylist] nomUtilisateur : "); console.log(tmp);
+    if (typeof tmp.nomUtilisateur == "undefined"){
+        tmp = metierUtilisateur.ajouterUtilisateur(nomUtilisateur);
+        console.log("[metierPlaylist | ajouterUser] nomUtilisateur : "); console.log(tmp);
+    }
+
     playlist.nbClics = 0;
     playlist.listeMorceaux = [];
     playlist.listeContributeurs = [];
-    playlist.nomCreateur = nomUtilisateur;
+    playlist.nomCreateur = tmp.nomUtilisateur;
     playlist.id = idPlaylist;
     objJson.liste[pos] = new Playlist(playlist);
     writeInJson(path);
-
+    console.log("[metier playlist] ajouter obj"); console.log(objJson.liste[pos]);
     pos++;
     idPlaylist++;
     //return liste[pos -1];
@@ -158,7 +161,6 @@ var lister = function (){
 
 
 var supprimerPlaylist = function (id) {
-
     readFromJson(path);
     for (var i = 0; i < objJson.liste.length; i++) {
         if (id === objJson.liste[i].id) {
@@ -166,10 +168,7 @@ var supprimerPlaylist = function (id) {
         }
         writeInJson(path);
         console.log(objJson.liste);
-
     }
-
-
 }
 
 
